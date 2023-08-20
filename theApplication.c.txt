@@ -1,0 +1,63 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+int matchPassword(char *givenPassword)
+{
+	FILE *password = fopen("Passwords.txt","r");
+	if(password == NULL){
+		printf("Important compontent for the program is missing");
+		exit(0);
+	}
+	else{
+		char *passwordFromFile;
+		while(fgets(passwordFromFile,sizeof(passwordFromFile),password))
+		{
+			if(strcmp(givenPassword,passwordFromFile)==0)
+			{
+				return passwordFromFile[4];
+			}
+		}	
+	}
+	return -1;
+}
+
+int main(){
+	printf("Please Enter the Password\n");
+	char pass[15];
+	scanf("%s", &pass);
+	char *passptr = pass;
+	int key = matchPassword(passptr);
+	if(key == -1)
+	{
+		printf("Invalid Credentials");
+		exit(1);	
+	}else{
+		printf("success");
+	}
+	return 0;
+		
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//exit(0) == files missing
+//exit(1) == wrong credentails
