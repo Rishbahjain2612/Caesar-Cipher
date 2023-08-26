@@ -37,50 +37,66 @@ int matchPassword(char *givenPassword)
         return -1;
 }
 
-int main(){
-        
-	//taking password
-	printf("Please Enter the Password: \n");
-        char pass[15];
-        scanf("%s", &pass);
-        char *passptr = pass;
-
-	printf("\n\nFor encrypting file PRESS 0, For decrypting PRESS 1\n\n");
-	int choice;
-	scanf("%d",&choice);
-
-        //geting the key and matching the password
-	int key = matchPassword(passptr);
-        
+void decrypt(int key)
+{
+		printf("\nEnter the file name: \n");
+		char filename[100];
+		scanf("%s",&filename);
+                FILE* inputFile = fopen(filename,"r");
+		
+		
+		printf("\nEnter the destination file for decrypted text: \n");
+		scanf("%s",&filename);
+		FILE* newFile = fopen(filename,"w");
 	
-	if(key == -1)
-        {
+		if(inputFile==NULL)
+		{
+			printf("\nFile not found\n");
+			exit(0);
+		}else{
+			while(!feof(inputFile)){
+				char c = fgetc(inputFile);
+				fputc(c+(key++%10),newFile);
+				
+			}
+			
 
-                printf("\n\n\nInvalid Credentials\n\n\n");
-                exit(1);
+			fclose(inputFile);
+			fclose(newFile);
+			newFile = fopen(filename,"r");
 
+			if(newFile == NULL)
+			{
+				printf("\nERROR : The destination file not found or could not be read");
+				exit(1);
+			}else{
+				fclose(newFile);
+				printf("\nSUCCESS : File successfully decrypted\n");
+				return;
+			}
+		}
+}
 
-        }
-	else if(choice==0){
-		printf("%d",key);
+void encrypt(int key){
+//		printf("%d",key);
 		printf("\nEnter the file name: \n");
 		char filename[100];
 		scanf("%s",&filename);
                 FILE* inputFile = fopen(filename,"r");
 		
 //		filename='';
-		printf("\n\nEnter the destination file for encrypted text: \n");
+		printf("\nEnter the destination file for encrypted text: \n");
 		scanf("%s",&filename);
 		FILE* newFile = fopen(filename,"w");
 		
 		
 		if(inputFile==NULL)
 		{
-			printf("\n\nFile not found\n\n");
+			printf("\nFile not found\n");
 			exit(0);
 		}else{
 			while(!feof(inputFile)){
-				printf("inputting..");
+				//printf("inputting..");
 				char c = fgetc(inputFile);
 					fputc(c-(key++%10),newFile);
 				//printf("%d",key++%100);
@@ -95,69 +111,39 @@ int main(){
 
 			if(newFile == NULL)
 			{
-				printf("\n\nERROR : The destination file not found or could not be read");
+				printf("\nERROR : The destination file not found or could not be read");
 				exit(1);
 			}else{
-				while(fgetc(newFile)!=EOF)
-				{printf("reading again...");
-					}
-				if(fgetc(newFile)==EOF)
-				{
-					printf("\n\nSUCCESS : File successfully encrypted\n\n");
-					return 0;
-				}
+				fclose(newFile);
+				printf("\n\nSUCCESS : File successfully encrypted\n\n");
+				return;
 			}
 		}
+}
+int main(){
+        
+	//taking password
+	printf("Please Enter the Password: \n");
+        char pass[15];
+        scanf("%s", &pass);
+        char *passptr = pass;
 
-        }
+	printf("\nFor encrypting file PRESS 0, For decrypting PRESS 1\n");
+	int choice;
+	scanf("%d",&choice);
 
-	else if(choice==1){
-		
-		printf("%d",key);
-		printf("\nEnter the file name: \n");
-		char filename[100];
-		scanf("%s",&filename);
-                FILE* inputFile = fopen(filename,"r");
-		
-		
-		printf("\n\nEnter the destination file for decrypted text: \n");
-		scanf("%s",&filename);
-		FILE* newFile = fopen(filename,"w");
+        
+	int key = matchPassword(passptr);
+        
 	
-		if(inputFile==NULL)
-		{
-			printf("\n\nFile not found\n\n");
-			exit(0);
-		}else{
-			while(!feof(inputFile)){
-				printf("inputting...");
-				char c = fgetc(inputFile);
-				//if(c!='\n'){
-					fputc(c+(key++%10),newFile);
-				//}
-			//	else{
-			//		fputc(c,newFile);
-			//	}
-			}
-			//fputc(fgetc(inputFile),newFile);
-
-			fclose(inputFile);
-			fclose(newFile);
-			newFile = fopen(filename,"r");
-
-			if(newFile == NULL)
-			{
-				printf("\n\nERROR : The destination file not found or could not be read");
-				exit(1);
-			}else{
-				//while(!feof(newFile))
-				while(fgetc(newFile)!=EOF)
-				{printf("reading again....");}
-				if(feof(newFile))
-				{
-					printf("\n\nSUCCESS : File successfully decrypted\n\n");
-					return 0;
-				}}}}
+	if(key == -1)
+        {
+                printf("\nInvalid Credentials\n");
+                exit(1);
+        }
+	else if(choice==0) encrypt(key);
+	else if(choice==1) decrypt(key);
+	else printf("Invalid Input");
         return 0;
 
 
