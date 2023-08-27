@@ -1,19 +1,19 @@
-## Caesar Cipher
+# Caesar Cipher
 This is a C language program that takes in a password and encrypts and decrypts a files.
 It takes a password for verification and forms a key for the process.
 
-# Variations:
+## Variations:
     Library
     No Library
     
-# Concepts Used:
+## Concepts Used:
     File handeling
     
     Bit Manipulation
     
     Static Library Building
 
-# Design is as follows:
+## Design is as follows:
 It includes 3 major functions ie as follows:
 
     encrypt()
